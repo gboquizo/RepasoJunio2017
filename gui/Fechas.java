@@ -165,8 +165,8 @@ public class Fechas extends JDialog {
 	 * @return distancia en meses
 	 */
 	private String obtenerTiempoMeses(LocalDate localdate1, LocalDate localdate2){
-		Period period = Period.between(localdate1, localdate2);
-		return period.getMonths() + " meses";
+		long meses = ChronoUnit.MONTHS.between(localdate1, localdate2);
+		return meses + " meses";
 		}
 	
 	/**
@@ -176,8 +176,9 @@ public class Fechas extends JDialog {
 	 * @return distancia en dias
 	 */
 	private String obtenerTiempoDias(LocalDate localdate1, LocalDate localdate2){
-		Period period = Period.between(localdate1, localdate2);
-		return period.getDays() + " dias";
+
+		long dias = ChronoUnit.DAYS.between(localdate1, localdate2);
+		return dias + " dias";
 		}
 	
 	/**
