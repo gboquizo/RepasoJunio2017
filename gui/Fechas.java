@@ -23,6 +23,11 @@ import java.awt.Label;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.border.TitledBorder;
 
 public class Fechas extends JDialog {
 
@@ -74,6 +79,13 @@ public class Fechas extends JDialog {
 		contentPanel.setLayout(null);
 		
 		spinnerInicio = new JSpinner();
+		spinnerInicio.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				fechaValida();
+				comprobarRadioButtons(spinnerInicio, spinnerFin);
+			}
+		});
+
 		spinnerInicio.setModel(new SpinnerDateModel(java.sql.Date.valueOf(FECHA_ACTUAL), null, null, Calendar.MONTH));
 		spinnerInicio.setEditor(new JSpinner.DateEditor(spinnerInicio, "dd 'de' MMMM 'de' yyyy', 'EEEE"));
 		spinnerInicio.setBounds(47, 111, 245, 22);
@@ -81,8 +93,13 @@ public class Fechas extends JDialog {
 		
 		
 		spinnerFin = new JSpinner();
+		spinnerFin.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				fechaValida();
+				comprobarRadioButtons(spinnerInicio, spinnerFin);
+			}
+		});
 		fechaFin = LocalDate.of(FECHA_ACTUAL.getYear() + 3, FECHA_ACTUAL.getMonth(), FECHA_ACTUAL.getDayOfMonth());
-		
 		spinnerFin.setModel(new SpinnerDateModel(java.sql.Date.valueOf(fechaFin), null, null, Calendar.MONTH));
 		spinnerFin.setEditor(new JSpinner.DateEditor(spinnerFin, "dd 'de' MMMM 'de' yyyy', 'EEEE"));
 		spinnerFin.setBounds(408, 111, 245, 22);
@@ -97,16 +114,31 @@ public class Fechas extends JDialog {
 		contentPanel.add(lblFechaFin);
 		
 		rdbtnDias = new JRadioButton("Dias");
+		rdbtnDias.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				comprobarRadioButtons(spinnerInicio, spinnerFin);
+			}
+		});
 		buttonGroup.add(rdbtnDias);
 		rdbtnDias.setBounds(172, 232, 130, 25);
 		contentPanel.add(rdbtnDias);
 		
 		rdbtnMeses = new JRadioButton("Meses");
+		rdbtnMeses.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				comprobarRadioButtons(spinnerInicio, spinnerFin);
+			}
+		});
 		buttonGroup.add(rdbtnMeses);
 		rdbtnMeses.setBounds(324, 232, 130, 25);
 		contentPanel.add(rdbtnMeses);
 		
 		rdbtnAos = new JRadioButton("Años");
+		rdbtnAos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				comprobarRadioButtons(spinnerInicio, spinnerFin);
+			}
+		});
 		buttonGroup.add(rdbtnAos);
 		rdbtnAos.setBounds(483, 232, 130, 25);
 		contentPanel.add(rdbtnAos);
@@ -119,11 +151,11 @@ public class Fechas extends JDialog {
 				dispose();
 			}
 		});
-		btnSalir.setBounds(429, 325, 105, 27);
+		btnSalir.setBounds(304, 317, 105, 27);
 		contentPanel.add(btnSalir);
 		
 		lblTiempoTranscurrido = new JLabel(TIEMPO_TRANSCURRIDO);
-		lblTiempoTranscurrido.setBounds(271, 12, 229, 17);
+		lblTiempoTranscurrido.setBounds(283, 12, 229, 17);
 		contentPanel.add(lblTiempoTranscurrido);
 		{
 			JPanel buttonPane = new JPanel();
@@ -133,14 +165,10 @@ public class Fechas extends JDialog {
 
 		comprobarRadioButtons(spinnerInicio, spinnerFin);
 		
-		JButton btnComprobar = new JButton("Comprobar");
-		btnComprobar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				comprobarRadioButtons(spinnerInicio, spinnerFin);
-			}
-		});
-		btnComprobar.setBounds(208, 325, 105, 27);
-		contentPanel.add(btnComprobar);
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(null, "Filtrar por : ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBounds(115, 202, 538, 103);
+		contentPanel.add(panel);
 
 	}
 
@@ -208,11 +236,8 @@ public class Fechas extends JDialog {
 	 * Comprueba que la fecha de fin no sea menor que la de inicio
 	 */
 	private void fechaValida(){
-		if(getFechaSpinner(spinnerFin).getYear() < getFechaSpinner(spinnerInicio).getYear()){
-			JOptionPane.showMessageDialog(null, "fE","",JOptionPane.ERROR_MESSAGE);
+		if(getFechaSpinner(spinnerFin).isBefore(getFechaSpinner(spinnerInicio))){
+			JOptionPane.showMessageDialog(null, "Fecha no válida","Error en la fecha",JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
-
-
 }
