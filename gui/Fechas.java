@@ -25,11 +25,17 @@ import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.io.Serializable;
+
 import javax.swing.event.ChangeListener;
+
+import funcionalidad.FechasNoModificadasException;
+import funcionalidad.Fichero;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.border.TitledBorder;
 
-public class Fechas extends JDialog {
+public class Fechas extends JDialog implements Serializable{
 
 	private static final String TIEMPO_TRANSCURRIDO = "Tiempo transcurrido : ";
 	/**
@@ -42,10 +48,11 @@ public class Fechas extends JDialog {
 	private JRadioButton rdbtnDias;
 	private JRadioButton rdbtnMeses;
 	private JRadioButton rdbtnAos;
-	private JLabel lblTiempoTranscurrido;
+	private static JLabel lblTiempoTranscurrido;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private JSpinner spinnerInicio;
-	private JSpinner spinnerFin;
+	private static JSpinner spinnerInicio;
+	private static JSpinner spinnerFin;
+	private static boolean modificado=false;
 
 
 	static {
@@ -104,6 +111,7 @@ public class Fechas extends JDialog {
 		spinnerFin.setEditor(new JSpinner.DateEditor(spinnerFin, "dd 'de' MMMM 'de' yyyy', 'EEEE"));
 		spinnerFin.setBounds(408, 111, 245, 22);
 		contentPanel.add(spinnerFin);
+		modificado=true;
 		
 		JLabel lblFechaInicio = new JLabel("Fecha inicio");
 		lblFechaInicio.setBounds(102, 71, 89, 17);
@@ -240,4 +248,28 @@ public class Fechas extends JDialog {
 			JOptionPane.showMessageDialog(null, "Fecha no válida","Error en la fecha",JOptionPane.ERROR_MESSAGE);
 		}
 	}
+	
+	public static LocalDate getFechaSpinnerInicio(){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime((Date) spinnerInicio.getModel().getValue());
+		LocalDate fecha = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+		return fecha;
+	}
+	
+	public static LocalDate getFechaSpinnerFin(){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime((Date) spinnerFin.getModel().getValue());
+		LocalDate fecha = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+		return fecha;
+	}
+	
+	public static String getDistancia(){
+		return lblTiempoTranscurrido.getText();
+	}
+	
+	public static boolean isModificado(){
+		return modificado;
+	}
+	
+
 }

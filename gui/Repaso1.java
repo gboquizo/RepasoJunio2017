@@ -3,9 +3,16 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import funcionalidad.ErrorAlEscribirException;
+import funcionalidad.ErrorAlLeerException;
+import funcionalidad.FechasNoModificadasException;
+import funcionalidad.General;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -14,8 +21,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.awt.event.InputEvent;
 import javax.swing.JSeparator;
+import java.awt.TextArea;
 
 public class Repaso1 extends JFrame {
 
@@ -24,6 +33,8 @@ public class Repaso1 extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JFileChooser jfilechooser = new JFileChooser();
+	private TextArea textArea;
 
 	/**
 	 * Launch the application.
@@ -62,11 +73,21 @@ public class Repaso1 extends JFrame {
 		mnFichero.add(mntmNuevo);
 		
 		JMenuItem mntmAbrir = new JMenuItem("Abrir");
+		mntmAbrir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				abrir();
+			}
+		});
 		mntmAbrir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		mntmAbrir.setMnemonic('A');
 		mnFichero.add(mntmAbrir);
 		
 		JMenuItem mntmGuardar = new JMenuItem("Guardar");
+		mntmGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				guardar();
+			}
+		});
 		mntmGuardar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		mntmGuardar.setMnemonic('G');
 		mnFichero.add(mntmGuardar);
@@ -138,9 +159,58 @@ public class Repaso1 extends JFrame {
 		mnAyuda.add(mntmAcercaDe);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		textArea = new TextArea();
+		textArea.setEditable(false);
+		textArea.setBounds(10, 28, 437, 187);
+		contentPane.add(textArea);
 	}
+	/**
+	 * Guarda los datos en un fichero
+	 */
+	void guardar(){
+		
+		if(!Fechas.isModificado()){
+			JOptionPane.showMessageDialog(contentPane, "Las fechas no han sido modificadas","Error Fechas",JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		if(jfilechooser.showSaveDialog(contentPane) != JFileChooser.APPROVE_OPTION){
+			return;
+		}
+			File file = jfilechooser.getSelectedFile();
+			General.setFile(file);
+			try {
+				General.guardar();
+			} catch (ErrorAlEscribirException e) {
+				JOptionPane.showMessageDialog(contentPane, e.getMessage(),"Error escritura",JOptionPane.ERROR_MESSAGE);
+			}
+
+	}
+	/**
+	 * Lee el fichero y vuelca su contenido en un textArea
+	 */
+	void abrir(){
+		
+		if(jfilechooser.showOpenDialog(contentPane) != JFileChooser.APPROVE_OPTION){
+			return;
+		}
+		
+		
+		try {
+			File file = jfilechooser.getSelectedFile();
+			String fecha = General.abrir(file);
+			textArea.setText(fecha);
+		} catch (ErrorAlLeerException  e) {
+			JOptionPane.showMessageDialog(contentPane, e.getMessage(),"Error escritura",JOptionPane.ERROR_MESSAGE);
+		}
+		
+		
+		
+	}
+	
+
 
 	
 }
