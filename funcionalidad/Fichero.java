@@ -17,7 +17,8 @@ public class Fichero {
 		try(DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)))){
 			out.writeUTF("Fecha inicio : " + fechaInicio.toString() + "\n"
 						+"Fecha fin : " + fechaFin.toString()+ "\n"
-						+ Jlabel );
+						+ Jlabel + "\n"
+						+ "Autor : Jesús Mejias Leiva" );
 		} catch (IOException e) {
 			throw new ErrorAlEscribirException("Error de escritura");
 		} 

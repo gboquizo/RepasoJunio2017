@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFileChooser;
@@ -10,7 +9,6 @@ import javax.swing.border.EmptyBorder;
 
 import funcionalidad.ErrorAlEscribirException;
 import funcionalidad.ErrorAlLeerException;
-import funcionalidad.FechasNoModificadasException;
 import funcionalidad.General;
 
 import javax.swing.JMenuBar;
@@ -24,9 +22,10 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.awt.event.InputEvent;
 import javax.swing.JSeparator;
-import java.awt.TextArea;
+import java.awt.Color;
+import javax.swing.JTextPane;
 
-public class Repaso1 extends JFrame {
+public class Repaso extends JFrame {
 
 	/**
 	 * 
@@ -34,7 +33,7 @@ public class Repaso1 extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JFileChooser jfilechooser = new JFileChooser();
-	private TextArea textArea;
+	private JTextPane textPane;
 
 	/**
 	 * Launch the application.
@@ -43,7 +42,7 @@ public class Repaso1 extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Repaso1 frame = new Repaso1();
+					Repaso frame = new Repaso();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -55,24 +54,33 @@ public class Repaso1 extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Repaso1() {
-		setTitle("Ejercicio repaso 1");
+	public Repaso() {
+		setResizable(false);
+		setTitle("Ejercicio repaso");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
 		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBorderPainted(false);
+		menuBar.setForeground(Color.WHITE);
+		menuBar.setBackground(Color.DARK_GRAY);
 		setJMenuBar(menuBar);
 		
 		JMenu mnFichero = new JMenu("Fichero");
+		mnFichero.setForeground(Color.WHITE);
 		mnFichero.setMnemonic('F');
 		menuBar.add(mnFichero);
 		
 		JMenuItem mntmNuevo = new JMenuItem("Nuevo");
+		mntmNuevo.setForeground(Color.WHITE);
+		mntmNuevo.setBackground(Color.DARK_GRAY);
 		mntmNuevo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		mntmNuevo.setMnemonic('N');
 		mnFichero.add(mntmNuevo);
 		
 		JMenuItem mntmAbrir = new JMenuItem("Abrir");
+		mntmAbrir.setForeground(Color.WHITE);
+		mntmAbrir.setBackground(Color.DARK_GRAY);
 		mntmAbrir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				abrir();
@@ -83,6 +91,8 @@ public class Repaso1 extends JFrame {
 		mnFichero.add(mntmAbrir);
 		
 		JMenuItem mntmGuardar = new JMenuItem("Guardar");
+		mntmGuardar.setForeground(Color.WHITE);
+		mntmGuardar.setBackground(Color.DARK_GRAY);
 		mntmGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				guardar();
@@ -93,6 +103,8 @@ public class Repaso1 extends JFrame {
 		mnFichero.add(mntmGuardar);
 		
 		JMenuItem mntmGuardarComo = new JMenuItem("Guardar como...");
+		mntmGuardarComo.setForeground(Color.WHITE);
+		mntmGuardarComo.setBackground(Color.DARK_GRAY);
 		mntmGuardarComo.setMnemonic('C');
 		mnFichero.add(mntmGuardarComo);
 		
@@ -100,44 +112,65 @@ public class Repaso1 extends JFrame {
 		mnFichero.add(separator);
 		
 		JMenuItem mntmSalir = new JMenuItem("Salir");
+		mntmSalir.setForeground(Color.WHITE);
+		mntmSalir.setBackground(Color.DARK_GRAY);
 		mntmSalir.setMnemonic('S');
 		mntmSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				
+				siFechaModificada();
 			}
+
+
 		});
 		mnFichero.add(mntmSalir);
 		
 		JMenu mnFechas = new JMenu("Fechas");
+		mnFechas.setForeground(Color.WHITE);
 		mnFechas.setMnemonic('E');
 		menuBar.add(mnFechas);
 		
 		JMenuItem mntmLocaldate = new JMenuItem("LocalDate");
+		mntmLocaldate.setForeground(Color.WHITE);
+		mntmLocaldate.setBackground(Color.DARK_GRAY);
 		mntmLocaldate.setMnemonic('L');
 		mnFechas.add(mntmLocaldate);
 		
 		JMenuItem mntmPeriod = new JMenuItem("Period");
+		mntmPeriod.setForeground(Color.WHITE);
+		mntmPeriod.setBackground(Color.DARK_GRAY);
 		mntmPeriod.setMnemonic('P');
 		mnFechas.add(mntmPeriod);
 		
 		JMenuItem mntmChronounit = new JMenuItem("ChronoUnit");
+		mntmChronounit.setForeground(Color.WHITE);
+		mntmChronounit.setBackground(Color.DARK_GRAY);
 		mntmChronounit.setMnemonic('C');
 		mnFechas.add(mntmChronounit);
 		
 		JMenuItem mntmGlobal = new JMenuItem("Global");
+		mntmGlobal.setForeground(Color.WHITE);
+		mntmGlobal.setBackground(Color.DARK_GRAY);
+		mntmGlobal.setMnemonic('G');
 		mntmGlobal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Fechas fechas = new Fechas();
 				fechas.setVisible(true);
 			}
 		});
+		
+		JSeparator separator_1 = new JSeparator();
+		mnFechas.add(separator_1);
 		mnFechas.add(mntmGlobal);
 		
 		JMenu mnAyuda = new JMenu("Info");
+		mnAyuda.setForeground(Color.WHITE);
 		mnAyuda.setMnemonic('I');
 		menuBar.add(mnAyuda);
 		
 		JMenuItem mntmAyuda = new JMenuItem("Ayuda");
+		mntmAyuda.setForeground(Color.WHITE);
+		mntmAyuda.setBackground(Color.DARK_GRAY);
 		mntmAyuda.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, InputEvent.ALT_MASK));
 		mntmAyuda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -149,6 +182,8 @@ public class Repaso1 extends JFrame {
 		mnAyuda.add(mntmAyuda);
 		
 		JMenuItem mntmAcercaDe = new JMenuItem("Acerca de");
+		mntmAcercaDe.setForeground(Color.WHITE);
+		mntmAcercaDe.setBackground(Color.DARK_GRAY);
 		mntmAcercaDe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				AcercaDe acerca = new AcercaDe();
@@ -158,24 +193,35 @@ public class Repaso1 extends JFrame {
 		mntmAcercaDe.setMnemonic('D');
 		mnAyuda.add(mntmAcercaDe);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		textArea = new TextArea();
-		textArea.setEditable(false);
-		textArea.setBounds(10, 28, 437, 187);
-		contentPane.add(textArea);
+		textPane = new JTextPane();
+		textPane.setEditable(false);
+		textPane.setForeground(Color.WHITE);
+		textPane.setBackground(Color.DARK_GRAY);
+		textPane.setBounds(123, 54, 205, 139);
+		contentPane.add(textPane);
 	}
 	/**
-	 * Guarda los datos en un fichero
+	 * Guarda los datos en un fichero, siempre que hayan sido modificados
 	 */
 	void guardar(){
 		
 		if(!Fechas.isModificado()){
-			JOptionPane.showMessageDialog(contentPane, "Las fechas no han sido modificadas","Error Fechas",JOptionPane.ERROR_MESSAGE);
-			return;
+			int opcion =JOptionPane.showConfirmDialog(contentPane, "La fechas no han sido modificadas, ¿Quieres modificarlas?","Fecha",JOptionPane.YES_NO_OPTION);
+			if(opcion == JOptionPane.YES_OPTION){
+				Fechas fecha = new Fechas();
+				fecha.setVisible(true);
+			}
+			else if(opcion == JOptionPane.NO_OPTION)
+				return;
+			else 
+				return;	
 		}
+		
 		if(jfilechooser.showSaveDialog(contentPane) != JFileChooser.APPROVE_OPTION){
 			return;
 		}
@@ -201,16 +247,25 @@ public class Repaso1 extends JFrame {
 		try {
 			File file = jfilechooser.getSelectedFile();
 			String fecha = General.abrir(file);
-			textArea.setText(fecha);
+			textPane.setText(fecha);
 		} catch (ErrorAlLeerException  e) {
 			JOptionPane.showMessageDialog(contentPane, e.getMessage(),"Error escritura",JOptionPane.ERROR_MESSAGE);
 		}
-		
-		
-		
 	}
 	
-
-
-	
+	/**
+	 * Comprueba que la fecha haya sido modificada antes de salir
+	 */
+	private void siFechaModificada() {
+		if(!Fechas.isModificado()){
+			int opcion =JOptionPane.showConfirmDialog(contentPane, "La fechas no han sido modificadas, ¿Quieres salir?","Fecha",JOptionPane.YES_NO_OPTION);
+			if(opcion == JOptionPane.YES_OPTION){
+				System.exit(0);
+			}
+			else if(opcion == JOptionPane.NO_OPTION)
+				return;
+			else 
+				return;	
+		}
+	}
 }
