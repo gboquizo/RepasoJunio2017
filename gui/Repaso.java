@@ -295,6 +295,7 @@ public class Repaso extends JFrame {
 			else 
 				return;	
 		}
+		System.exit(0);
 	}
 	
 	/**
