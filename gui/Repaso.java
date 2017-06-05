@@ -304,6 +304,7 @@ public class Repaso extends JFrame {
 	private void nuevo(){
 		if(!Fechas.isModificado()){
 			JOptionPane.showMessageDialog(contentPane,"Las fechas no han sido modificadas", "Fechas", JOptionPane.ERROR_MESSAGE);
+			return;
 		}
 		textPane.setText(null);
 		Fechas.defaultSpinnerInicio();
