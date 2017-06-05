@@ -300,12 +300,12 @@ public class Fechas extends JDialog implements Serializable {
 	
 	private void siFechaModificada() {
 		if(!modificado){
-			int opcion =JOptionPane.showConfirmDialog(null, "La fechas no han sido modificadas, ¿Quieres salir?","Fecha",JOptionPane.YES_NO_OPTION);
+			int opcion =JOptionPane.showConfirmDialog(contentPanel, "La fechas no han sido modificadas, ¿Quieres salir?","Fecha",JOptionPane.YES_NO_OPTION);
 			if(opcion == JOptionPane.YES_OPTION){
 				dispose();
 			}
 		}
-		dispose();
+		
 	}
 
 	public static void setModificado(boolean modificado) {
