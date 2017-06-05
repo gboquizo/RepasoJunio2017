@@ -24,6 +24,9 @@ import java.awt.event.InputEvent;
 import javax.swing.JSeparator;
 import java.awt.Color;
 import javax.swing.JTextPane;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 
 public class Repaso extends JFrame {
 
@@ -34,6 +37,7 @@ public class Repaso extends JFrame {
 	private JPanel contentPane;
 	private JFileChooser jfilechooser = new JFileChooser();
 	private JTextPane textPane;
+	private boolean cambiosGuardados=false;
 
 	/**
 	 * Launch the application.
@@ -55,11 +59,16 @@ public class Repaso extends JFrame {
 	 * Create the frame.
 	 */
 	public Repaso() {
+
+	
 		setResizable(false);
 		setTitle("Ejercicio repaso");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		controlarSalida();
+		
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
+	
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBorderPainted(false);
 		menuBar.setForeground(Color.WHITE);
@@ -72,6 +81,11 @@ public class Repaso extends JFrame {
 		menuBar.add(mnFichero);
 		
 		JMenuItem mntmNuevo = new JMenuItem("Nuevo");
+		mntmNuevo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nuevo();
+			}
+		});
 		mntmNuevo.setForeground(Color.WHITE);
 		mntmNuevo.setBackground(Color.DARK_GRAY);
 		mntmNuevo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
@@ -117,8 +131,7 @@ public class Repaso extends JFrame {
 		mntmSalir.setMnemonic('S');
 		mntmSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				siFechaModificada();
+				siCambiosGuardados();
 			}
 
 
@@ -205,11 +218,23 @@ public class Repaso extends JFrame {
 		textPane.setBounds(123, 54, 205, 139);
 		contentPane.add(textPane);
 	}
+
+	/**
+	 * Controla los cambios antes de cerrar el programa
+	 */
+	private void controlarSalida() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				siCambiosGuardados();
+			}
+		});
+	}
 	/**
 	 * Guarda los datos en un fichero, siempre que hayan sido modificados
 	 */
 	void guardar(){
-		
+
 		if(!Fechas.isModificado()){
 			int opcion =JOptionPane.showConfirmDialog(contentPane, "La fechas no han sido modificadas, ¿Quieres modificarlas?","Fecha",JOptionPane.YES_NO_OPTION);
 			if(opcion == JOptionPane.YES_OPTION){
@@ -220,8 +245,8 @@ public class Repaso extends JFrame {
 				return;
 			else 
 				return;	
-		}
-		
+			}
+
 		if(jfilechooser.showSaveDialog(contentPane) != JFileChooser.APPROVE_OPTION){
 			return;
 		}
@@ -229,6 +254,8 @@ public class Repaso extends JFrame {
 			General.setFile(file);
 			try {
 				General.guardar();
+				cambiosGuardados=true;
+				JOptionPane.showMessageDialog(contentPane, "Cambios guardados con éxito","Guardar",JOptionPane.INFORMATION_MESSAGE);
 			} catch (ErrorAlEscribirException e) {
 				JOptionPane.showMessageDialog(contentPane, e.getMessage(),"Error escritura",JOptionPane.ERROR_MESSAGE);
 			}
@@ -253,12 +280,13 @@ public class Repaso extends JFrame {
 		}
 	}
 	
+
 	/**
-	 * Comprueba que la fecha haya sido modificada antes de salir
+	 * Comprueba si hay cambios sin guardar antes de salir
 	 */
-	private void siFechaModificada() {
-		if(!Fechas.isModificado()){
-			int opcion =JOptionPane.showConfirmDialog(contentPane, "La fechas no han sido modificadas, ¿Quieres salir?","Fecha",JOptionPane.YES_NO_OPTION);
+	private void siCambiosGuardados() {
+		if(Fechas.isModificado() == true && !cambiosGuardados){
+			int opcion =JOptionPane.showConfirmDialog(contentPane, "Hay cambios sin guardar ¿Quieres salir?","Fecha",JOptionPane.YES_NO_OPTION);
 			if(opcion == JOptionPane.YES_OPTION){
 				System.exit(0);
 			}
@@ -268,4 +296,18 @@ public class Repaso extends JFrame {
 				return;	
 		}
 	}
+	
+	/**
+	 * Resetea los JSpinner a la fechas iniciales si se habian modificado
+	 */
+	private void nuevo(){
+		if(!Fechas.isModificado()){
+			JOptionPane.showMessageDialog(contentPane,"Las fechas no han sido modificadas", "Fechas", JOptionPane.ERROR_MESSAGE);
+		}
+		Fechas.defaultSpinnerInicio();
+		Fechas.defaultSpinnerFin();
+		Fechas fecha = new Fechas();
+		fecha.setVisible(true);
+	}
+	
 }

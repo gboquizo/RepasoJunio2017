@@ -34,5 +34,25 @@ public class General {
 		file=fichero;
 	}
 	
+	/**
+	 * Comprueba si el fichero existe
+	 * @param file
+	 * @return boolean
+	 */
+	public static boolean ficheroExiste(File file){
+		if(file.exists())
+			return true;
+			return false;
+	}
+
+	/**
+	 * Devuelve el fichero
+	 * @return file
+	 */
+	public static File getFile() {
+		return file;
+	}
+	
+	
 	
 }

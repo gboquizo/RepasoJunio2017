@@ -41,8 +41,8 @@ public class Fechas extends JDialog implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private LocalDate FECHA_ACTUAL=LocalDate.now();
-	private LocalDate fechaFin;
+	private static LocalDate FECHA_ACTUAL=LocalDate.now();
+	private static LocalDate fechaFin;
 	private JRadioButton rdbtnDias;
 	private JRadioButton rdbtnMeses;
 	private JRadioButton rdbtnAos;
@@ -95,8 +95,7 @@ public class Fechas extends JDialog implements Serializable {
 			}
 		});
 
-		spinnerInicio.setModel(new SpinnerDateModel(java.sql.Date.valueOf(FECHA_ACTUAL), null, null, Calendar.MONTH));
-		spinnerInicio.setEditor(new JSpinner.DateEditor(spinnerInicio, "dd 'de' MMMM 'de' yyyy', 'EEEE"));
+		defaultSpinnerInicio();
 		spinnerInicio.setBounds(112, 111, 245, 22);
 		contentPanel.add(spinnerInicio);
 		
@@ -111,9 +110,7 @@ public class Fechas extends JDialog implements Serializable {
 				comprobarRadioButtons(spinnerInicio, spinnerFin);
 			}
 		});
-		fechaFin = LocalDate.of(FECHA_ACTUAL.getYear() + 3, FECHA_ACTUAL.getMonth(), FECHA_ACTUAL.getDayOfMonth());
-		spinnerFin.setModel(new SpinnerDateModel(java.sql.Date.valueOf(fechaFin), null, null, Calendar.MONTH));
-		spinnerFin.setEditor(new JSpinner.DateEditor(spinnerFin, "dd 'de' MMMM 'de' yyyy', 'EEEE"));
+		defaultSpinnerFin();
 		spinnerFin.setBounds(394, 111, 245, 22);
 		contentPanel.add(spinnerFin);
 		
@@ -134,6 +131,7 @@ public class Fechas extends JDialog implements Serializable {
 		rdbtnDias.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				comprobarRadioButtons(spinnerInicio, spinnerFin);
+				modificado=true;
 			}
 		});
 		buttonGroup.add(rdbtnDias);
@@ -146,18 +144,20 @@ public class Fechas extends JDialog implements Serializable {
 		rdbtnMeses.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				comprobarRadioButtons(spinnerInicio, spinnerFin);
+				modificado=true;
 			}
 		});
 		buttonGroup.add(rdbtnMeses);
 		rdbtnMeses.setBounds(324, 232, 130, 25);
 		contentPanel.add(rdbtnMeses);
 		
-		rdbtnAos = new JRadioButton("Años");
+		rdbtnAos = new JRadioButton("Años");;
 		rdbtnAos.setForeground(Color.WHITE);
 		rdbtnAos.setBackground(Color.DARK_GRAY);
 		rdbtnAos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				comprobarRadioButtons(spinnerInicio, spinnerFin);
+				modificado=true;
 			}
 		});
 		buttonGroup.add(rdbtnAos);
@@ -191,6 +191,18 @@ public class Fechas extends JDialog implements Serializable {
 		panel.setBounds(115, 202, 538, 103);
 		contentPanel.add(panel);
 
+	}
+
+	public static void defaultSpinnerFin() {
+		fechaFin = LocalDate.of(FECHA_ACTUAL.getYear() + 3, FECHA_ACTUAL.getMonth(), FECHA_ACTUAL.getDayOfMonth());
+		spinnerFin.setModel(new SpinnerDateModel(java.sql.Date.valueOf(fechaFin), null, null, Calendar.MONTH));
+		spinnerFin.setEditor(new JSpinner.DateEditor(spinnerFin, "dd 'de' MMMM 'de' yyyy', 'EEEE"));
+		
+	}
+
+	public static void defaultSpinnerInicio() {
+		spinnerInicio.setModel(new SpinnerDateModel(java.sql.Date.valueOf(FECHA_ACTUAL), null, null, Calendar.MONTH));
+		spinnerInicio.setEditor(new JSpinner.DateEditor(spinnerInicio, "dd 'de' MMMM 'de' yyyy', 'EEEE"));
 	}
 
 	/**
@@ -259,6 +271,8 @@ public class Fechas extends JDialog implements Serializable {
 	private void fechaValida(){
 		if(getFechaSpinner(spinnerFin).isBefore(getFechaSpinner(spinnerInicio))){
 			JOptionPane.showMessageDialog(null, "Fecha no válida","Error en la fecha",JOptionPane.ERROR_MESSAGE);
+			defaultSpinnerInicio();
+			defaultSpinnerFin();
 		}
 	}
 	
@@ -293,4 +307,10 @@ public class Fechas extends JDialog implements Serializable {
 		}
 		dispose();
 	}
+
+	public static void setModificado(boolean modificado) {
+		Fechas.modificado = modificado;
+	}
+	
+
 }
