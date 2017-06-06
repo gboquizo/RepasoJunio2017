@@ -39,6 +39,7 @@ public class Repaso extends JFrame {
 	private JFileChooser jfilechooser = new JFileChooser();
 	private JTextPane textPane;
 	private boolean cambiosGuardados=false;
+	private Fechas fecha;
 
 	/**
 	 * Launch the application.
@@ -294,16 +295,14 @@ public class Repaso extends JFrame {
 	 */
 	private void siCambiosGuardados() {
 		if(Fechas.isModificado() == true && !cambiosGuardados){
-			int opcion =JOptionPane.showConfirmDialog(contentPane, "Hay cambios sin guardar ¿Quieres salir?","Fecha",JOptionPane.YES_NO_OPTION);
-			if(opcion == JOptionPane.YES_OPTION){
-				System.exit(0);
-			}
-			else if(opcion == JOptionPane.NO_OPTION)
-				return;
-			else 
-				return;	
+			int opcion =JOptionPane.showConfirmDialog(contentPane, "Hay cambios sin guardar ¿Quieres guardarlos?","Fecha",JOptionPane.YES_NO_OPTION);
+				if(opcion == JOptionPane.YES_OPTION)
+					guardar();
+				else
+					System.exit(0);
+					
 		}
-		System.exit(0);
+
 	}
 	
 	/**
@@ -317,7 +316,7 @@ public class Repaso extends JFrame {
 		textPane.setText(null);
 		Fechas.defaultSpinnerInicio();
 		Fechas.defaultSpinnerFin();
-		Fechas fecha = new Fechas();
+		fecha = new Fechas();
 		fecha.setVisible(true);
 	}
 

@@ -42,9 +42,6 @@ import javax.swing.border.LineBorder;
 public class Fechas extends JDialog implements Serializable {
 
 	private static final String TIEMPO_TRANSCURRIDO = "Tiempo transcurrido : ";
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private static LocalDate FECHA_ACTUAL=LocalDate.now();
@@ -179,6 +176,7 @@ public class Fechas extends JDialog implements Serializable {
 			public void actionPerformed(ActionEvent e) {
 				Fichero.ecribirLinea(getFechaSpinnerInicio(), lblTiempoTranscurrido.getText(), getFechaSpinnerFin());
 				JOptionPane.showMessageDialog(null, "Linea añadida correctamente");
+				modificado=true;
 				dispose();
 			}
 		});
