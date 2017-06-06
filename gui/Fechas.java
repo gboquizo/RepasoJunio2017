@@ -178,6 +178,7 @@ public class Fechas extends JDialog implements Serializable {
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Fichero.ecribirLinea(getFechaSpinnerInicio(), lblTiempoTranscurrido.getText(), getFechaSpinnerFin());
+				JOptionPane.showMessageDialog(null, "Linea añadida correctamente");
 				dispose();
 			}
 		});
