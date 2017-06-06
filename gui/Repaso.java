@@ -278,7 +278,7 @@ public class Repaso extends JFrame {
 			ArrayList<String> fecha = General.abrir(file);
 			String cadena="";
 			for (String string : fecha) {
-				cadena+=string;
+				cadena+=string + "\n";
 				
 			}
 			textPane.setText(cadena);

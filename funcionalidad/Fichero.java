@@ -37,7 +37,7 @@ public class Fichero {
 
 	public static void ecribirLinea(LocalDate fechaInicio, String Jlabel, LocalDate fechaFin) {
 		String linea = " Fecha inicio : " + fechaInicio.toString() +" Fecha fin : " + fechaFin.toString() + Jlabel + " Autor : Jesús Mejias Leiva ";
-		lineas.add(linea);
+		lineas.add(linea + "\n");
 	}
 	
 	public static ArrayList<String> leer(File file) throws ErrorAlLeerException{
