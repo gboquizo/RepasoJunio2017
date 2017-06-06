@@ -22,10 +22,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 
 import javax.swing.event.ChangeListener;
 
+import funcionalidad.ErrorAlEscribirException;
+import funcionalidad.Fichero;
+import funcionalidad.General;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.border.TitledBorder;
@@ -171,7 +177,8 @@ public class Fechas extends JDialog implements Serializable {
 		btnSalir.setBackground(Color.DARK_GRAY);
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				siFechaModificada();
+				Fichero.ecribirLinea(getFechaSpinnerInicio(), lblTiempoTranscurrido.getText(), getFechaSpinnerFin());
+				dispose();
 			}
 		});
 		btnSalir.setBounds(324, 340, 105, 27);
@@ -190,7 +197,6 @@ public class Fechas extends JDialog implements Serializable {
 		panel.setBorder(new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Filtrar por : ", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 		panel.setBounds(115, 202, 538, 103);
 		contentPanel.add(panel);
-
 	}
 
 	public static void defaultSpinnerFin() {
@@ -200,7 +206,7 @@ public class Fechas extends JDialog implements Serializable {
 		
 	}
 
-	public static void defaultSpinnerInicio() {
+	public static void defaultSpinnerInicio() {			
 		spinnerInicio.setModel(new SpinnerDateModel(java.sql.Date.valueOf(FECHA_ACTUAL), null, null, Calendar.MONTH));
 		spinnerInicio.setEditor(new JSpinner.DateEditor(spinnerInicio, "dd 'de' MMMM 'de' yyyy', 'EEEE"));
 	}
@@ -222,7 +228,7 @@ public class Fechas extends JDialog implements Serializable {
 	/**
 	 * Calcula la distancia que hay entre 2 fechas, en meses
 	 * @param localdate1
-	 * @param localdate2
+	 * @param localdate2			while(Fechas.){
 	 * @return distancia en meses
 	 */
 	private String obtenerTiempoMeses(LocalDate localdate1, LocalDate localdate2){
@@ -315,6 +321,10 @@ public class Fechas extends JDialog implements Serializable {
 	public static void setModificado(boolean modificado) {
 		Fechas.modificado = modificado;
 	}
+
+
+	
+	
 	
 
 }

@@ -1,6 +1,7 @@
 package funcionalidad;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import gui.Fechas;
 
@@ -22,7 +23,7 @@ public class General {
 	 * @return
 	 * @throws ErrorAlLeerException
 	 */
-	public static String abrir(File file) throws ErrorAlLeerException{
+	public static ArrayList<String> abrir(File file) throws ErrorAlLeerException{
 		return Fichero.leer(file);
 	}
 	

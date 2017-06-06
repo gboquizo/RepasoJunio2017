@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.awt.event.InputEvent;
 import javax.swing.JSeparator;
 import java.awt.Color;
@@ -66,7 +67,7 @@ public class Repaso extends JFrame {
 		controlarSalida();
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 725, 545);
 		
 	
 		JMenuBar menuBar = new JMenuBar();
@@ -215,8 +216,9 @@ public class Repaso extends JFrame {
 		textPane.setEditable(false);
 		textPane.setForeground(Color.WHITE);
 		textPane.setBackground(Color.DARK_GRAY);
-		textPane.setBounds(123, 54, 205, 139);
+		textPane.setBounds(12, 54, 701, 422);
 		contentPane.add(textPane);
+
 	}
 
 	/**
@@ -273,10 +275,16 @@ public class Repaso extends JFrame {
 		
 		try {
 			File file = jfilechooser.getSelectedFile();
-			String fecha = General.abrir(file);
-			textPane.setText(fecha);
+			ArrayList<String> fecha = General.abrir(file);
+			String cadena="";
+			for (String string : fecha) {
+				cadena+=string;
+				
+			}
+			textPane.setText(cadena);
+			
 		} catch (ErrorAlLeerException  e) {
-			JOptionPane.showMessageDialog(contentPane, e.getMessage(),"Error escritura",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(contentPane, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -312,5 +320,7 @@ public class Repaso extends JFrame {
 		Fechas fecha = new Fechas();
 		fecha.setVisible(true);
 	}
+
+	
 	
 }
