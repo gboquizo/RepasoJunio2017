@@ -17,44 +17,30 @@ public class Fichero {
 	
 	public static void escritura(File file,LocalDate fechaInicio,String Jlabel, LocalDate fechaFin) throws ErrorAlEscribirException{
 		
-		try{
-		
-				FileWriter out = new FileWriter(file);
-				BufferedWriter bw = new BufferedWriter(out);
-			
-			
-			
+		try(BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
 			for (String linea : lineas) {
 				bw.write(linea + "\n");
 			}
-			
-			bw.close();
-			
-		} catch (IOException e) {
+
+		}catch (IOException e) {
 			throw new ErrorAlEscribirException("Error de escritura");
 		} 
 	}
 
-	public static void ecribirLinea(LocalDate fechaInicio, String Jlabel, LocalDate fechaFin) {
-		String linea = " Fecha inicio : " + fechaInicio.toString() +" Fecha fin : " + fechaFin.toString() + Jlabel + " Autor : Jesús Mejias Leiva ";
+	public static void escribirLinea(LocalDate fechaInicio, String Jlabel, LocalDate fechaFin) {
+		String linea = " Fecha inicio: " + fechaInicio.toString() +"\t Fecha fin: " + fechaFin.toString() + Jlabel + "\t Autor : Jesús Mejias Leiva ";
 		lineas.add(linea + "\n");
 	}
 	
 	public static ArrayList<String> leer(File file) throws ErrorAlLeerException{
 		
-		FileReader in;
-		BufferedReader br;
 		String linea;
 		ArrayList <String> lineas = new ArrayList<String>();
-			try {
-
-				in = new FileReader(file);
-				br = new BufferedReader(in);
+			try (BufferedReader br = new BufferedReader(new FileReader(file))){
 				while((linea = br.readLine()) != null){
 					lineas.add(linea);
 				}
 
-				in.close();
 				return lineas;
 				
 			} catch (IOException e) {

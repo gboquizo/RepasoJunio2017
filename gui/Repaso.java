@@ -39,7 +39,6 @@ public class Repaso extends JFrame {
 	private JFileChooser jfilechooser = new JFileChooser();
 	private JTextPane textPane;
 	private boolean cambiosGuardados=false;
-	private Fechas fecha;
 
 	/**
 	 * Launch the application.
@@ -64,7 +63,7 @@ public class Repaso extends JFrame {
 
 	
 		setResizable(false);
-		setTitle("Ejercicio repaso");
+		actualizarTitulo();
 		controlarSalida();
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -134,6 +133,9 @@ public class Repaso extends JFrame {
 		mntmSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				siCambiosGuardados();
+				File file = new File("SinNombre.txt");
+				General.setFile(file);
+				actualizarTitulo();
 			}
 
 
@@ -171,6 +173,7 @@ public class Repaso extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				Fechas fechas = new Fechas();
 				fechas.setVisible(true);
+				textPane.setText("");
 			}
 		});
 		
@@ -220,6 +223,11 @@ public class Repaso extends JFrame {
 		textPane.setBounds(12, 54, 701, 422);
 		contentPane.add(textPane);
 
+		
+	}
+
+	public  void actualizarTitulo() {
+		setTitle("Ejercicio repaso" + " - " + General.getFile().getName());
 	}
 
 	/**
@@ -255,6 +263,7 @@ public class Repaso extends JFrame {
 		}
 			File file = jfilechooser.getSelectedFile();
 			General.setFile(file);
+			actualizarTitulo();
 			try {
 				General.guardar();
 				cambiosGuardados=true;
@@ -277,6 +286,8 @@ public class Repaso extends JFrame {
 		try {
 			File file = jfilechooser.getSelectedFile();
 			ArrayList<String> fecha = General.abrir(file);
+			General.setFile(file);
+			actualizarTitulo();
 			String cadena="";
 			for (String string : fecha) {
 				cadena+=string + "\n";
@@ -295,11 +306,20 @@ public class Repaso extends JFrame {
 	 */
 	private void siCambiosGuardados() {
 		if(Fechas.isModificado() == true && !cambiosGuardados){
-			int opcion =JOptionPane.showConfirmDialog(contentPane, "Hay cambios sin guardar ¿Quieres guardarlos?","Fecha",JOptionPane.YES_NO_OPTION);
-				if(opcion == JOptionPane.YES_OPTION)
-					guardar();
-				else
-					System.exit(0);
+			int opcion =JOptionPane.showConfirmDialog(contentPane, "Hay cambios sin guardar ¿Quieres guardarlos?","Fecha",JOptionPane.YES_NO_CANCEL_OPTION);
+				switch(opcion){
+					case JOptionPane.YES_OPTION:
+						 guardar();
+						 System.exit(0);
+					case JOptionPane.NO_OPTION:
+						System.exit(0);
+						
+					default:
+						Repaso repaso = new Repaso();
+						repaso.setVisible(true);
+				}
+					
+				
 					
 		}
 
@@ -313,11 +333,12 @@ public class Repaso extends JFrame {
 			JOptionPane.showMessageDialog(contentPane,"Las fechas no han sido modificadas", "Fechas", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		textPane.setText(null);
 		Fechas.defaultSpinnerInicio();
 		Fechas.defaultSpinnerFin();
-		fecha = new Fechas();
-		fecha.setVisible(true);
+		File file = new File("SinNombre.txt");
+		General.setFile(file);
+		actualizarTitulo();
+		textPane.setText("");
 	}
 
 	

@@ -23,13 +23,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Serializable;
 
 import javax.swing.event.ChangeListener;
 
-import funcionalidad.ErrorAlEscribirException;
+
 import funcionalidad.Fichero;
 import funcionalidad.General;
 
@@ -59,18 +57,7 @@ public class Fechas extends JDialog implements Serializable {
 	static {
 		Locale.setDefault(new Locale("es", "ES"));//Para Mostrar los dias y meses en formato Español
 	}
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			Fechas dialog = new Fechas();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+
 
 	/**
 	 * Create the dialog.
@@ -174,9 +161,12 @@ public class Fechas extends JDialog implements Serializable {
 		btnSalir.setBackground(Color.DARK_GRAY);
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Fichero.ecribirLinea(getFechaSpinnerInicio(), lblTiempoTranscurrido.getText(), getFechaSpinnerFin());
+				Fichero.escribirLinea(getFechaSpinnerInicio(), lblTiempoTranscurrido.getText(), getFechaSpinnerFin());
 				JOptionPane.showMessageDialog(null, "Linea añadida correctamente");
 				modificado=true;
+				File file = new File("SinNombre.txt");
+				General.setFile(file);
+				
 				dispose();
 			}
 		});
@@ -303,19 +293,6 @@ public class Fechas extends JDialog implements Serializable {
 		return modificado;
 	}
 	
-	private void siFechaModificada() {
-		if(modificado){
-			dispose();
-		}
-		if(!modificado){
-			int opcion =JOptionPane.showConfirmDialog(contentPanel, "La fechas no han sido modificadas, ¿Quieres salir?","Fecha",JOptionPane.YES_NO_OPTION);
-			if(opcion == JOptionPane.YES_OPTION){
-				dispose();
-			}
-		}
-
-		
-	}
 
 	public static void setModificado(boolean modificado) {
 		Fechas.modificado = modificado;
